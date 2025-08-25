@@ -9,7 +9,7 @@ from Batangas_PTCAO.src.model import (
     Property, Room, Amenity, TypicalLocation, LongLat, PropertyStatus, User,
     PropertyImage, Destination, DestinationType, PropertyReport
 )
-from Batangas_PTCAO.src.extension import db
+from extension import db
 from sqlalchemy.exc import SQLAlchemyError
 
 properties_bp = Blueprint("properties", __name__, url_prefix="/property")

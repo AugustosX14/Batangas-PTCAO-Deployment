@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request, render_template
 from sqlalchemy.orm import joinedload
-from Batangas_PTCAO.src.extension import db
+from extension import db
 from Batangas_PTCAO.src.model import Property, Destination, LongLat, PropertyImage, Room, Amenity, DestinationType, \
     PropertyStatus
 

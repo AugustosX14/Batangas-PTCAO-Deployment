@@ -1,7 +1,7 @@
 # Enhanced TOURIST_Destination.py - API Routes for Tourist Destinations with Municipality Filter and Nearby Destinations
 
 from flask import Blueprint, jsonify, request, render_template
-from Batangas_PTCAO.src.extension import db
+from extension import db
 from Batangas_PTCAO.src.model import Property, PropertyImage, Room, Amenity, Destination, LongLat, DestinationType
 from sqlalchemy import func, desc, text
 import os

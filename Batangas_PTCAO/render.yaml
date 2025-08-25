@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: batangas-ptcao
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn --bind 0.0.0.0:$PORT --chdir src app:app
+    envVars:
+      - key: FLASK_ENV
+        value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: batangas-db
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+
+databases:
+  - name: batangas-db
+    databaseName: batangas_ptcao
+    user: batangas_user
+    plan: free

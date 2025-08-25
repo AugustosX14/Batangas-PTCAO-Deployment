@@ -1,125 +1,91 @@
+# File: /Users/antonio/Documents/development_folder/Batangas_PTCAO/Batangas_PTCAO/src/app.py
 import os
-from flask import Flask, send_from_directory, redirect, url_for
-from flask_jwt_extended import JWTManager
-from sqlalchemy import values
-
-from Batangas_PTCAO.src.extension import db
-from Batangas_PTCAO.src.config import Config
-from datetime import timedelta
-
-from Batangas_PTCAO.src.routes.MTO_Announcement import init_mto_announcement_routes
-from Batangas_PTCAO.src.routes.PTCAO_Dashboard import init_ptcao_dashboard_routes
-from Batangas_PTCAO.src.routes.PTCAO_Destinations import init_ptcao_destinations_routes
-from Batangas_PTCAO.src.routes.PTCAO_Property import init_ptcao_property_routes
-from Batangas_PTCAO.src.routes.TOURIST_Contact import init_tourist_contact_routes
-from Batangas_PTCAO.src.routes.TOURIST_Destination import init_tourist_api_routes
-from Batangas_PTCAO.src.routes.TOURIST_Home import init_tourist_home_routes
-from Batangas_PTCAO.src.routes.TOURIST_Events import init_tourist_events_routes
-from Batangas_PTCAO.src.routes.TOURIST_Map import init_tourist_map_routes
-
-from Batangas_PTCAO.src.routes.auth import init_auth_routes
-from Batangas_PTCAO.src.routes.MTO import init_mto_routes
-from Batangas_PTCAO.src.routes.MTO_Property import init_property_routes
-from Batangas_PTCAO.src.routes.MTO_Dashboard import init_dashboard_routes
-from Batangas_PTCAO.src.routes.MTO_Events import init_events_routes
-from Batangas_PTCAO.src.routes.MTO_Analytics import init_analytics_routes
-from Batangas_PTCAO.src.routes.MTO_VisitorsRecords import init_visitor_records_routes
-from Batangas_PTCAO.src.routes.MTO_Destinations import init_destinations_routes
-from Batangas_PTCAO.src.routes.MTO_Reports import init_reports_routes
-from Batangas_PTCAO.src.routes.ADMIN_users import init_admin_users_routes  # New import
-from Batangas_PTCAO.src.routes.ADMIN_dashboard import init_admin_dashboard_routes
-from Batangas_PTCAO.src.routes.ADMIN_reports import init_admin_reports_routes
-
+from flask import Flask, render_template, send_from_directory
+from config import Config
+from extension import db, bcrypt, jwt
+from model import *
 
 def create_app():
-    app = Flask(__name__,
-                template_folder=os.path.join(os.path.dirname(__file__), 'templates'),
-                static_folder=os.path.join(os.path.dirname(__file__), 'static'))
-
-    @app.template_filter('number_format')
-    def number_format(value):
-        try:
-            return "{:,}".format(int(value))
-        except (ValueError, TypeError):
-            return values
-
-    # Configurations
+    app = Flask(__name__)
     app.config.from_object(Config)
-    app.config['JWT_SECRET_KEY'] = os.environ.get('JWT_SECRET_KEY', 'fallback-secret-key')
-    app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=1)
-    app.secret_key = os.environ.get('SECRET_KEY', 'default-secret-key')
-    app.config['JWT_TOKEN_LOCATION'] = ['cookies']
-    app.config['JWT_COOKIE_SECURE'] = False
-    app.config['JWT_COOKIE_CSRF_PROTECT'] = False
-
-    # Configure upload folders - ensure they're inside static folder
-    base_path = os.path.dirname(__file__)
-    static_path = os.path.join(base_path, 'static')
-    uploads_path = os.path.join(static_path, 'uploads')
-
-    # Create upload folder structure
-    events_path = os.path.join(uploads_path, 'events')
-    destinations_path = os.path.join(uploads_path, 'destinations')
-    properties_path = os.path.join(uploads_path, 'properties')
-
-    os.makedirs(events_path, exist_ok=True)
-    os.makedirs(destinations_path, exist_ok=True)
-    os.makedirs(properties_path, exist_ok=True)
-
-    app.config['UPLOAD_FOLDER'] = events_path  # For properties/events
-    app.config['DESTINATIONS_UPLOAD_FOLDER'] = destinations_path  # For destinations
-    app.config['PROPERTIES_UPLOAD_FOLDER'] = properties_path  # For general properties
-
-    jwt = JWTManager(app)
+    
+    # Initialize extensions
     db.init_app(app)
-
-    with app.app_context():
-        db.create_all()
-
-    # Root route - redirect to tourist home page
-    @app.route('/')
-    def index():
-        return redirect(url_for('tourist_home.tourist_home'))
-
-    # Initialize all routes
-    init_auth_routes(app)
-    init_mto_routes(app)
-    init_property_routes(app)
-    init_dashboard_routes(app)
-    init_events_routes(app)
-    init_analytics_routes(app)
-    init_visitor_records_routes(app)
-    init_destinations_routes(app)
-    init_reports_routes(app)
-    init_mto_announcement_routes(app)
-    init_admin_users_routes(app)
-    init_admin_dashboard_routes(app)
-    init_admin_reports_routes(app)
-    init_ptcao_dashboard_routes(app)
-    init_ptcao_destinations_routes(app)
-    init_ptcao_property_routes(app)
-    init_tourist_home_routes(app)
-    init_tourist_events_routes(app)
-    init_tourist_api_routes(app)
-    init_tourist_map_routes(app)
-    init_tourist_contact_routes(app)
-
-    # Static file serving route
+    bcrypt.init_app(app)
+    jwt.init_app(app)
+    
+    # Create upload directories
+    os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+    os.makedirs(os.path.join(app.config['UPLOAD_FOLDER'], 'events'), exist_ok=True)
+    os.makedirs(os.path.join(app.config['UPLOAD_FOLDER'], 'destinations'), exist_ok=True)
+    os.makedirs(os.path.join(app.config['UPLOAD_FOLDER'], 'properties'), exist_ok=True)
+    
+    # Import and register blueprints
+    from routes.auth import auth_bp
+    from routes.TOURIST_Home import tourist_bp
+    from routes.TOURIST_Destination import tourist_destination_bp
+    from routes.TOURIST_Map import tourist_map_bp
+    from routes.TOURIST_Events import tourist_events_bp
+    from routes.MTO_Dashboard import mto_bp
+    from routes.MTO_Destinations import mto_destinations_bp
+    from routes.MTO_Property import mto_property_bp
+    from routes.MTO_Events import mto_events_bp
+    from routes.MTO_Analytics import mto_analytics_bp
+    from routes.MTO_VisitorsRecords import mto_visitors_bp
+    from routes.MTO_Announcement import mto_announcements_bp
+    from routes.MTO_Reports import mto_reports_bp
+    from routes.PTCAO_Dashboard import ptcao_bp
+    from routes.PTCAO_Destinations import ptcao_destinations_bp
+    from routes.PTCAO_Property import ptcao_property_bp
+    from routes.ADMIN_dashboard import admin_bp
+    from routes.ADMIN_users import admin_users_bp
+    from routes.ADMIN_reports import admin_reports_bp
+    
+    # Register blueprints
+    app.register_blueprint(auth_bp)
+    app.register_blueprint(tourist_bp)
+    app.register_blueprint(tourist_destination_bp)
+    app.register_blueprint(tourist_map_bp)
+    app.register_blueprint(tourist_events_bp)
+    app.register_blueprint(mto_bp)
+    app.register_blueprint(mto_destinations_bp)
+    app.register_blueprint(mto_property_bp)
+    app.register_blueprint(mto_events_bp)
+    app.register_blueprint(mto_analytics_bp)
+    app.register_blueprint(mto_visitors_bp)
+    app.register_blueprint(mto_announcements_bp)
+    app.register_blueprint(mto_reports_bp)
+    app.register_blueprint(ptcao_bp)
+    app.register_blueprint(ptcao_destinations_bp)
+    app.register_blueprint(ptcao_property_bp)
+    app.register_blueprint(admin_bp)
+    app.register_blueprint(admin_users_bp)
+    app.register_blueprint(admin_reports_bp)
+    
+    # Static file serving
     @app.route('/static/<path:filename>')
     def serve_static_file(filename):
-        if allowed_file(filename):
-            return send_from_directory(os.path.join(app.root_path, 'static'), filename)
-        return 'File type not allowed', 400
-
+        return send_from_directory('static', filename)
+    
+    # Root route
+    @app.route('/')
+    def index():
+        return render_template('TOURIST_Home.html')
+    
+    # Create tables
+    with app.app_context():
+        try:
+            db.create_all()
+            print("Database tables created successfully!")
+        except Exception as e:
+            print(f"Error creating database tables: {e}")
+    
     return app
 
-
-def allowed_file(filename):
-    ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
-
+# Create the app
 app = create_app()
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    port = int(os.environ.get('PORT', 5000))
+    debug = os.environ.get('FLASK_ENV') != 'production'
+    app.run(host='0.0.0.0', port=port, debug=debug)

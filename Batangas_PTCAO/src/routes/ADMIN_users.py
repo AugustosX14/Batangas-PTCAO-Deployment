@@ -1,6 +1,6 @@
 from flask import render_template, request, jsonify, redirect, url_for, Blueprint
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from Batangas_PTCAO.src.extension import db
+from extension import db
 from Batangas_PTCAO.src.model import User
 from sqlalchemy import or_
 from datetime import datetime
