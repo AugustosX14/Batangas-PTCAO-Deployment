@@ -45,25 +45,25 @@ def admin_dashboard():
                          visitor_stats=visitor_stats)
 
 def get_visitor_stats():
-        date_7_days_ago = datetime.now() - timedelta(days=7)
+    date_7_days_ago = datetime.now() - timedelta(days=7)
 
-        daily_stats = db.session.query(
-            func.date(TouristReport.report_date).label('day'),
-            func.sum(TouristReport.total_daytour_guests + TouristReport.total_overnight_guests).label('count')
-        ).filter(TouristReport.report_date >= date_7_days_ago
-                 ).group_by('day'
-                            ).order_by('day').all()
+    daily_stats = db.session.query(
+        func.date(TouristReport.report_date).label('day'),
+        func.sum(TouristReport.total_daytour_guests + TouristReport.total_overnight_guests).label('count')
+    ).filter(TouristReport.report_date >= date_7_days_ago
+             ).group_by('day'
+                        ).order_by('day').all()
 
-        visitor_type_stats = [
-            {'type': 'Day Tour', 'count': db.session.query(func.sum(TouristReport.total_daytour_guests)).scalar() or 0},
-            {'type': 'Overnight',
-             'count': db.session.query(func.sum(TouristReport.total_overnight_guests)).scalar() or 0}
-        ]
+    visitor_type_stats = [
+        {'type': 'Day Tour', 'count': db.session.query(func.sum(TouristReport.total_daytour_guests)).scalar() or 0},
+        {'type': 'Overnight',
+         'count': db.session.query(func.sum(TouristReport.total_overnight_guests)).scalar() or 0}
+    ]
 
-        return {
-            'daily': [{'day': stat.day.strftime('%Y-%m-%d'), 'count': stat.count or 0} for stat in daily_stats],
-            'visitor_type': visitor_type_stats
-        }
+    return {
+        'daily': [{'day': stat.day.strftime('%Y-%m-%d'), 'count': stat.count or 0} for stat in daily_stats],
+        'visitor_type': visitor_type_stats
+    }
 
 @admin_dashboard_bp.route('/dashboard/stats')
 @jwt_required()
