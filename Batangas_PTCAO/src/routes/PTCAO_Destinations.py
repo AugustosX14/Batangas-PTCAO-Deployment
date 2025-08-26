@@ -18,12 +18,12 @@ def ptcao_destinations():
     try:
         current_user_id = get_jwt_identity()
         if current_user_id != "ptcao":
-            return redirect(url_for('login'))
+            return redirect(url_for('auth.login'))
 
         return render_template('PTCAO_Destinations.html')
     except Exception as e:
         current_app.logger.error(f"Error loading PTCAO destinations: {str(e)}")
-        return redirect(url_for('login'))
+        return redirect(url_for('auth.login'))
 
 @ptcao_destinations_bp.route('/api/ptcao/destinations/map-data')
 @jwt_required()

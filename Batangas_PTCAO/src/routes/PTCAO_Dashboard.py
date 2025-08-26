@@ -26,7 +26,7 @@ def ptcao_dashboard():
 
         if current_user_id != "ptcao":
             flash('Unauthorized access', 'error')
-            return redirect(url_for('login'))
+            return redirect(url_for('auth.login'))
 
         current_year = datetime.now().year
 
@@ -149,7 +149,7 @@ def ptcao_dashboard():
     except Exception as e:
         current_app.logger.error(f"Error loading PTCAO dashboard: {str(e)}")
         flash('Failed to load dashboard data', 'error')
-        return redirect(url_for('login'))
+        return redirect(url_for('auth.login'))
 
 def get_municipal_summary(current_year):
     """Get summary data for all municipalities"""

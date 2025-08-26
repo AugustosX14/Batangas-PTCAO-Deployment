@@ -14,7 +14,7 @@ def init_mto_routes(app):
 def dashboard():
     if 'account_id' not in session or session.get('account_type') != 'mto':
         flash('Please login to access this page', 'error')
-        return redirect(url_for('login'))
+        return redirect(url_for('auth.login'))
 
     current_user_id = get_jwt_identity()
     user = User.query.get(current_user_id)
@@ -254,7 +254,7 @@ def mto_registration():
             db.session.commit()
 
             flash('Registration successful! Your account will be activated after review.', 'success')
-            return redirect(url_for('login'))
+            return redirect(url_for('auth.login'))
 
         except Exception as e:
             db.session.rollback()
