@@ -5,11 +5,11 @@ from datetime import datetime, date
 from sqlalchemy import or_, and_
 import os
 
+# Create blueprint
+tourist_events_bp = Blueprint('tourist_events', __name__)
 
-def init_tourist_events_routes(app):
-
-    @app.route('/api/events')
-    def get_events():
+@tourist_events_bp.route('/api/events')
+def get_events():
         try:
             # Get query parameters
             category = request.args.get('category', 'all')
@@ -142,8 +142,8 @@ def init_tourist_events_routes(app):
                 'events': []
             }), 500
 
-    @app.route('/api/events/<int:event_id>')
-    def get_event_detail(event_id):
+@tourist_events_bp.route('/api/events/<int:event_id>')
+def get_event_detail(event_id):
         """Get detailed information about a specific event"""
         try:
             event = Event.query.get_or_404(event_id)
@@ -212,8 +212,8 @@ def init_tourist_events_routes(app):
                 'error': str(e)
             }), 500
 
-    @app.route('/api/events/categories')
-    def get_event_categories():
+@tourist_events_bp.route('/api/events/categories')
+def get_event_categories():
         """Get all unique event categories"""
         try:
             categories = db.session.query(Event.category).distinct().filter(Event.category.isnot(None)).all()
@@ -231,8 +231,8 @@ def init_tourist_events_routes(app):
                 'categories': []
             }), 500
 
-    @app.route('/api/events/municipalities')
-    def get_event_municipalities():
+@tourist_events_bp.route('/api/events/municipalities')
+def get_event_municipalities():
         """Get all municipalities that have events"""
         try:
             municipalities = db.session.query(Event.municipality).distinct().filter(
@@ -251,8 +251,8 @@ def init_tourist_events_routes(app):
                 'municipalities': []
             }), 500
 
-    @app.route('/api/events/featured')
-    def get_featured_event():
+@tourist_events_bp.route('/api/events/featured')
+def get_featured_event():
         """Get a featured event for the hero section"""
         try:
             # Get the most upcoming festival event or the latest event
@@ -325,18 +325,18 @@ def init_tourist_events_routes(app):
                 'error': str(e)
             }), 500
 
-    @app.route('/home')
-    def get_home():
+@tourist_events_bp.route('/home')
+def get_home():
         return render_template('TOURIST_Home.html')
 
-    @app.route('/destinations')
-    def get_destinations():
+@tourist_events_bp.route('/destinations')
+def get_destinations():
         return render_template('TOURIST_Destination.html')
 
-    @app.route('/map')
-    def get_map():
+@tourist_events_bp.route('/map')
+def get_map():
         return render_template('TOURIST_Map.html')
 
-    @app.route('/about')
-    def get_about():
+@tourist_events_bp.route('/about')
+def get_about():
         return render_template('TOURIST_About.html')

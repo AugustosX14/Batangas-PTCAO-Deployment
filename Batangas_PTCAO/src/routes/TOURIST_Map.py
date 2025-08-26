@@ -3,11 +3,11 @@ from sqlalchemy.orm import joinedload
 from extension import db
 from model import Property, Destination, LongLat, PropertyImage, Room, Amenity, DestinationType, PropertyStatus
 
+# Create blueprint
+tourist_map_bp = Blueprint('tourist_map', __name__)
 
-def init_tourist_map_routes(app):
-
-    @app.route('/api/map/properties', methods=['GET'])
-    def get_map_properties():
+@tourist_map_bp.route('/api/map/properties', methods=['GET'])
+def get_map_properties():
         """Get all properties with coordinates for the map"""
         try:
             # Get query parameters for filtering
@@ -129,8 +129,8 @@ def init_tourist_map_routes(app):
                 'message': f'Error fetching properties: {str(e)}'
             }), 500
 
-    @app.route('/api/map/destinations', methods=['GET'])
-    def get_map_destinations():
+@tourist_map_bp.route('/api/map/destinations', methods=['GET'])
+def get_map_destinations():
         """Get all destinations with coordinates for the map"""
         try:
             # Get query parameters for filtering
@@ -209,8 +209,8 @@ def init_tourist_map_routes(app):
                 'message': f'Error fetching destinations: {str(e)}'
             }), 500
 
-    @app.route('/api/map/combined', methods=['GET'])
-    def get_combined_map_data():
+@tourist_map_bp.route('/api/map/combined', methods=['GET'])
+def get_combined_map_data():
         """Get both properties and destinations for the map"""
         try:
             # Get query parameters
@@ -358,8 +358,8 @@ def init_tourist_map_routes(app):
                 'message': f'Error fetching combined map data: {str(e)}'
             }), 500
 
-    @app.route('/api/map/municipalities', methods=['GET'])
-    def get_municipalities():
+@tourist_map_bp.route('/api/map/municipalities', methods=['GET'])
+def get_municipalities():
         """Get list of municipalities that have properties or destinations"""
         try:
             # Get municipalities from properties
@@ -392,8 +392,8 @@ def init_tourist_map_routes(app):
                 'message': f'Error fetching municipalities: {str(e)}'
             }), 500
 
-    @app.route('/api/map/property/<int:property_id>', methods=['GET'])
-    def get_property_details(property_id):
+@tourist_map_bp.route('/api/map/property/<int:property_id>', methods=['GET'])
+def get_property_details(property_id):
         """Get detailed information about a specific property"""
         try:
             property_obj = db.session.query(Property) \
@@ -462,8 +462,8 @@ def init_tourist_map_routes(app):
                 'message': f'Error fetching property details: {str(e)}'
             }), 500
 
-    @app.route('/api/map/destination/<int:destination_id>', methods=['GET'])
-    def get_destination_details(destination_id):
+@tourist_map_bp.route('/api/map/destination/<int:destination_id>', methods=['GET'])
+def get_destination_details(destination_id):
         """Get detailed information about a specific destination"""
         try:
             destination = db.session.query(Destination) \
@@ -505,22 +505,22 @@ def init_tourist_map_routes(app):
                 'message': f'Error fetching destination details: {str(e)}'
             }), 500
 
-    @app.route('/home')
-    def events_get_home():
+@tourist_map_bp.route('/home')
+def events_get_home():
         return render_template('TOURIST_Home.html')
 
-    @app.route('/destinations')
-    def events_get_destinations():
+@tourist_map_bp.route('/destinations')
+def events_get_destinations():
         return render_template('TOURIST_Destination.html')
 
-    @app.route('/map')
-    def events_get_map():
+@tourist_map_bp.route('/map')
+def events_get_map():
         return render_template('TOURIST_Map.html')
 
-    @app.route('/events')
-    def events_get_events():
+@tourist_map_bp.route('/events')
+def events_get_events():
         return render_template('TOURIST_Event.html')
 
-    @app.route('/about')
-    def events_get_about():
+@tourist_map_bp.route('/about')
+def events_get_about():
         return render_template('TOURIST_About.html')

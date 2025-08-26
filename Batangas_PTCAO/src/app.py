@@ -22,43 +22,45 @@ def create_app():
     
     # Import and register blueprints
     from routes.auth import auth_bp
-    from routes.TOURIST_Home import tourist_bp
-    from routes.TOURIST_Destination import tourist_destination_bp
+    from routes.TOURIST_Home import tourist_home_bp
+    from routes.TOURIST_Destination import tourist_api_bp
     from routes.TOURIST_Map import tourist_map_bp
     from routes.TOURIST_Events import tourist_events_bp
-    from routes.MTO_Dashboard import mto_bp
-    from routes.MTO_Destinations import mto_destinations_bp
-    from routes.MTO_Property import mto_property_bp
-    from routes.MTO_Events import mto_events_bp
-    from routes.MTO_Analytics import mto_analytics_bp
-    from routes.MTO_VisitorsRecords import mto_visitors_bp
-    from routes.MTO_Announcement import mto_announcements_bp
-    from routes.MTO_Reports import mto_reports_bp
-    from routes.PTCAO_Dashboard import ptcao_bp
+    from routes.MTO import mto_bp
+    from routes.MTO_Dashboard import dashboard_bp
+    from routes.MTO_Destinations import destinations_bp
+    from routes.MTO_Property import properties_bp
+    from routes.MTO_Events import events_bp
+    from routes.MTO_Analytics import analytics_bp
+    from routes.MTO_VisitorsRecords import visitor_records_bp
+    from routes.MTO_Announcement import announcement_bp
+    from routes.MTO_Reports import reports_bp
+    from routes.PTCAO_Dashboard import ptcao_dashboard_bp
     from routes.PTCAO_Destinations import ptcao_destinations_bp
-    from routes.PTCAO_Property import ptcao_property_bp
-    from routes.ADMIN_dashboard import admin_bp
+    from routes.PTCAO_Property import ptcao_properties_bp
+    from routes.ADMIN_dashboard import admin_dashboard_bp
     from routes.ADMIN_users import admin_users_bp
     from routes.ADMIN_reports import admin_reports_bp
     
     # Register blueprints
     app.register_blueprint(auth_bp)
-    app.register_blueprint(tourist_bp)
-    app.register_blueprint(tourist_destination_bp)
+    app.register_blueprint(tourist_home_bp)
+    app.register_blueprint(tourist_api_bp)
     app.register_blueprint(tourist_map_bp)
     app.register_blueprint(tourist_events_bp)
     app.register_blueprint(mto_bp)
-    app.register_blueprint(mto_destinations_bp)
-    app.register_blueprint(mto_property_bp)
-    app.register_blueprint(mto_events_bp)
-    app.register_blueprint(mto_analytics_bp)
-    app.register_blueprint(mto_visitors_bp)
-    app.register_blueprint(mto_announcements_bp)
-    app.register_blueprint(mto_reports_bp)
-    app.register_blueprint(ptcao_bp)
+    app.register_blueprint(dashboard_bp)
+    app.register_blueprint(destinations_bp)
+    app.register_blueprint(properties_bp)
+    app.register_blueprint(events_bp)
+    app.register_blueprint(analytics_bp)
+    app.register_blueprint(visitor_records_bp)
+    app.register_blueprint(announcement_bp)
+    app.register_blueprint(reports_bp)
+    app.register_blueprint(ptcao_dashboard_bp)
     app.register_blueprint(ptcao_destinations_bp)
-    app.register_blueprint(ptcao_property_bp)
-    app.register_blueprint(admin_bp)
+    app.register_blueprint(ptcao_properties_bp)
+    app.register_blueprint(admin_dashboard_bp)
     app.register_blueprint(admin_users_bp)
     app.register_blueprint(admin_reports_bp)
     
