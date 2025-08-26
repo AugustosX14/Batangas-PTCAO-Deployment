@@ -13,7 +13,7 @@ services:
       pip install -r requirements.txt
     startCommand: |
       cd Batangas_PTCAO/src
-      python main.py
+      python app.py
     plan: free
     envVars:
       - key: DATABASE_URL
