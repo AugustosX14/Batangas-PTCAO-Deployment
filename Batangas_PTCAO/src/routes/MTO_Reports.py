@@ -5,7 +5,7 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 from datetime import datetime, timedelta
 from sqlalchemy import or_, and_
 from extension import db
-from Batangas_PTCAO.src.model import Property, User, PropertyReport, TouristReport
+from model import Property, User, PropertyReport, TouristReport
 import pandas as pd
 import os
 

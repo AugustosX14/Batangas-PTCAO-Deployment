@@ -1,5 +1,5 @@
 import pytest
-from Batangas_PTCAO.src.model import User, AccountStatus
+from model import User, AccountStatus
 
 def test_login_successful(client, app, db_session):
     # Create a test user

@@ -2,12 +2,7 @@ from flask import Blueprint, jsonify, request, render_template, flash, redirect,
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from datetime import datetime, timedelta
 from extension import db
-from Batangas_PTCAO.src.model import (
-    Property,
-    PropertyReport,
-    TouristReport,
-    User
-)
+from model import Property, PropertyReport, TouristReport, User
 from sqlalchemy import func, extract, case, and_, or_
 import pandas as pd
 import os

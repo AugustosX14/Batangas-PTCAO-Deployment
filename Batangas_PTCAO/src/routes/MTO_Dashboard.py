@@ -2,17 +2,7 @@ from flask import Blueprint, jsonify, request, url_for, render_template, flash, 
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from datetime import datetime, timedelta
 from extension import db
-from Batangas_PTCAO.src.model import (
-    User,
-    Property,
-    VisitorStatistics,
-    BarangayMonthlyStatistics,
-    PropertyMonthlyStatistics,
-    VisitorRecord,
-    VisitorDataUpload,
-    PropertyReport,
-    TouristReport
-)
+from model import User, Property, VisitorStatistics, BarangayMonthlyStatistics, PropertyMonthlyStatistics, VisitorRecord, VisitorDataUpload, PropertyReport, TouristReport
 import pandas as pd
 import os
 from werkzeug.utils import secure_filename

@@ -2,7 +2,7 @@
 
 from flask import Blueprint, jsonify, request, render_template
 from extension import db
-from Batangas_PTCAO.src.model import Property, PropertyImage, Room, Amenity, Destination, LongLat, DestinationType
+from model import Property, PropertyImage, Room, Amenity, Destination, LongLat, DestinationType
 from sqlalchemy import func, desc, text
 import os
 import math

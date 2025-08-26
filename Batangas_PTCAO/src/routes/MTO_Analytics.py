@@ -2,14 +2,7 @@ from flask import Blueprint, jsonify, request, render_template, current_app, red
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from datetime import datetime, timedelta
 from extension import db
-from Batangas_PTCAO.src.model import (
-    User,
-    Property,
-    PropertyReport,
-    TouristReport,
-    BarangayMonthlyStatistics,
-    PropertyMonthlyStatistics, VisitorStatistics
-)
+from model import User, Property, PropertyReport, TouristReport, BarangayMonthlyStatistics, PropertyMonthlyStatistics, VisitorStatistics
 
 analytics_bp = Blueprint('analytics', __name__, template_folder='templates')
 

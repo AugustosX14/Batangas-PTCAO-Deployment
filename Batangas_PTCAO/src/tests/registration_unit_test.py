@@ -1,7 +1,7 @@
 import unittest
 from flask import session
-from Batangas_PTCAO.src.app import app, db
-from Batangas_PTCAO.src.model import User, BusinessRegistration, SpecialServices, Room, EventFacility
+from app import app, db
+from model import User, BusinessRegistration, SpecialServices, Room, EventFacility
 
 
 class TestRegistrationRoutes(unittest.TestCase):

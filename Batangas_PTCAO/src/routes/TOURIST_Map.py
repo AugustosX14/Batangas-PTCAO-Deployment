@@ -1,8 +1,7 @@
 from flask import Blueprint, jsonify, request, render_template
 from sqlalchemy.orm import joinedload
 from extension import db
-from Batangas_PTCAO.src.model import Property, Destination, LongLat, PropertyImage, Room, Amenity, DestinationType, \
-    PropertyStatus
+from model import Property, Destination, LongLat, PropertyImage, Room, Amenity, DestinationType, PropertyStatus
 
 
 def init_tourist_map_routes(app):

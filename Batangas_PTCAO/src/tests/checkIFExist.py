@@ -1,7 +1,7 @@
 # In Python shell with app context
 from sqlalchemy import desc
 
-from Batangas_PTCAO.src.model import Destination, Property
+from model import Destination, Property
 
 # Test destination query
 destinations = Destination.query.order_by(desc(Destination.is_featured), Destination.name).all()

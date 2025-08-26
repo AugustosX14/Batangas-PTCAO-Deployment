@@ -3,7 +3,7 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 from sqlalchemy.orm import joinedload
 
 from extension import db
-from Batangas_PTCAO.src.model import Property, User, LongLat, Amenity, Room
+from model import Property, User, LongLat, Amenity, Room
 from sqlalchemy.exc import SQLAlchemyError
 import json
 

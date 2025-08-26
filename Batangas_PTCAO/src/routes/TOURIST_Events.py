@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, jsonify, request
 from extension import db
-from Batangas_PTCAO.src.model import Event
+from model import Event
 from datetime import datetime, date
 from sqlalchemy import or_, and_
 import os

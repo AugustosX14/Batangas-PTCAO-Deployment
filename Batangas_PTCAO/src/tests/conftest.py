@@ -1,7 +1,7 @@
 import pytest
 from flask import Flask
-from Batangas_PTCAO.src.extension import db
-from Batangas_PTCAO.src.config import Config
+from extension import db
+from config import Config
 from flask_jwt_extended import JWTManager
 
 

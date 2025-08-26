@@ -2,8 +2,7 @@ from flask import Blueprint, request, render_template, redirect, url_for, flash,
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from datetime import datetime, timedelta
 from extension import db
-from Batangas_PTCAO.src.model import User, Property, VisitorStatistics, VisitorDataUpload, PropertyStatus, \
-    PropertyReport, TouristReport
+from model import User, Property, VisitorStatistics, VisitorDataUpload, PropertyStatus, PropertyReport, TouristReport
 
 mto_bp = Blueprint('mto', __name__, url_prefix='/mto')
 
