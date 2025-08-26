@@ -5,8 +5,10 @@ from model import User, Property, TouristReport
 from extension import db
 from sqlalchemy import func
 
+# Create blueprint at module level
+admin_reports_bp = Blueprint('admin_reports', __name__)
+
 def init_admin_reports_routes(app):
-    admin_reports_bp = Blueprint('admin_reports', __name__)
 
     def generate_visitor_report_data():
         results = db.session.query(

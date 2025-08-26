@@ -5,9 +5,10 @@ from model import User
 from sqlalchemy import or_
 from datetime import datetime
 
+# Create blueprint at module level
+admin_users_bp = Blueprint('admin_users', __name__)
 
 def init_admin_users_routes(app):
-    admin_users_bp = Blueprint('admin_users', __name__)
 
     @admin_users_bp.route('/users')
     @jwt_required()

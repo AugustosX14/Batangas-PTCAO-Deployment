@@ -5,9 +5,10 @@ from extension import db
 from datetime import datetime, timedelta
 from sqlalchemy import func
 
+# Create blueprint at module level
+admin_dashboard_bp = Blueprint('admin_dashboard', __name__)
 
 def init_admin_dashboard_routes(app):
-    admin_dashboard_bp = Blueprint('admin_dashboard', __name__)
 
     @admin_dashboard_bp.route('/dashboard')
     @jwt_required()
