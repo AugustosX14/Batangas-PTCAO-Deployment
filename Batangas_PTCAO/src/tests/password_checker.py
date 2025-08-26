@@ -1,4 +1,4 @@
-import bcrypt
+from extension import bcrypt
 
 hashed_password = b"$2b$12$beUYqIixa29lAsJOJyv11.lVR3.atrovI3TBqe6.E21pEsxeuqlHO"
 input_password = "1234".encode('utf-8')

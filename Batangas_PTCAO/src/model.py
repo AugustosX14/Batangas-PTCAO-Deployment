@@ -1,7 +1,6 @@
 from datetime import datetime
 from sqlalchemy import CheckConstraint, Enum as SqlEnum
-from extension import db
-import bcrypt
+from extension import db, bcrypt
 from enum import Enum
 
 
@@ -37,12 +36,11 @@ class User(db.Model):
         return f'<User {self.username}>'
 
     def set_password(self, password: str):
-        salt = bcrypt.gensalt()
-        self.password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+        self.password = bcrypt.generate_password_hash(password).decode('utf-8')
 
     def check_password(self, password: str) -> bool:
         try:
-            return bcrypt.checkpw(password.encode('utf-8'), self.password.encode('utf-8'))
+            return bcrypt.check_password_hash(self.password, password)
         except ValueError as e:
             return False
 

@@ -1,7 +1,6 @@
-import bcrypt
 from flask import render_template, request, redirect, url_for, session, flash
 from flask_jwt_extended import create_access_token, set_access_cookies
-from extension import db
+from extension import db, bcrypt
 from Batangas_PTCAO.src.model import User
 from enum import Enum
 
