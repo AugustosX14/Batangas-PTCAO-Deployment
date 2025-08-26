@@ -14,7 +14,7 @@ def init_admin_dashboard_routes(app):
 @admin_dashboard_bp.route('/dashboard')
 @jwt_required()
 def admin_dashboard():
-        # Get counts for dashboard cards
+    # Get counts for dashboard cards
     total_users = User.query.filter_by(is_archived=False).count()
     total_properties = Property.query.count()
 
@@ -44,7 +44,7 @@ def admin_dashboard():
                          recent_visitors=recent_visitors,
                          visitor_stats=visitor_stats)
 
-    def get_visitor_stats():
+def get_visitor_stats():
         date_7_days_ago = datetime.now() - timedelta(days=7)
 
         daily_stats = db.session.query(
