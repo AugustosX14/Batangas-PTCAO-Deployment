@@ -24,6 +24,9 @@ class Config:
     # JWT Configuration
     JWT_SECRET_KEY = os.environ.get('JWT_SECRET_KEY', SECRET_KEY)
     JWT_ACCESS_TOKEN_EXPIRES = False
+    JWT_TOKEN_LOCATION = ['cookies']
+    JWT_COOKIE_SECURE = False  # Set to True in production with HTTPS
+    JWT_COOKIE_CSRF_PROTECT = False  # Disable CSRF for simplicity
     
     # Upload configuration
     UPLOAD_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static', 'uploads')

@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for, session, flash
+from flask import Blueprint, render_template, request, redirect, url_for, session, flash, make_response
 from flask_jwt_extended import create_access_token, set_access_cookies
 from extension import db, bcrypt
 from model import User
@@ -49,7 +49,11 @@ def login():
             session['user_id'] = "admin"
             session['user_role'] = "admin"
             session['is_logged_in'] = True
-            return redirect(url_for('admin_dashboard.admin_dashboard'))
+            
+            # Create response with JWT cookie
+            response = make_response(redirect(url_for('admin_dashboard.admin_dashboard')))
+            set_access_cookies(response, access_token)
+            return response
 
         # Check for built-in PTCAO account
         if email == PTCAO_EMAIL and password == PTCAO_PASSWORD:
@@ -63,7 +67,11 @@ def login():
             session['user_id'] = "ptcao"
             session['user_role'] = "ptcao"
             session['is_logged_in'] = True
-            return redirect(url_for('ptcao_dashboard.ptcao_dashboard'))
+            
+            # Create response with JWT cookie
+            response = make_response(redirect(url_for('ptcao_dashboard.ptcao_dashboard')))
+            set_access_cookies(response, access_token)
+            return response
 
         # Check database users
         user = User.query.filter_by(email=email).first()
@@ -79,14 +87,18 @@ def login():
             session['is_logged_in'] = True
             session['municipality'] = user.municipality
 
+            # Create response with JWT cookie
             if user.designation.lower() == 'admin':
-                return redirect(url_for('admin_dashboard.admin_dashboard'))
+                response = make_response(redirect(url_for('admin_dashboard.admin_dashboard')))
             elif user.designation.lower() == 'mto':
-                return redirect(url_for('dashboard.mto_dashboard'))
+                response = make_response(redirect(url_for('dashboard.mto_dashboard')))
             elif user.designation.lower() == 'ptcao':
-                return redirect(url_for('ptcao_dashboard.ptcao_dashboard'))
+                response = make_response(redirect(url_for('ptcao_dashboard.ptcao_dashboard')))
             else:
-                return redirect(url_for('dashboard.mto_dashboard'))
+                response = make_response(redirect(url_for('dashboard.mto_dashboard')))
+            
+            set_access_cookies(response, access_token)
+            return response
         else:
             flash('Invalid email or password', 'error')
             return render_template('Login.html')
@@ -96,8 +108,11 @@ def login():
 @auth_bp.route('/logout')
 def logout():
     session.clear()
+    response = make_response(redirect(url_for('auth.home')))
+    # Clear JWT cookies
+    response.set_cookie('access_token_cookie', '', expires=0)
     flash('You have been logged out successfully', 'success')
-    return redirect(url_for('auth.home'))
+    return response
 
 @auth_bp.route('/register', methods=['GET', 'POST'])
 def register():
